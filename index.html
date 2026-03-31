@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brendon Testing Site - Github Pages</title>
-    
+
     <!-- DY stuff -->
     <style type+"text/css">
-        span, p, div, h1, h2, h3 
-        input, select, button {
-            font-family:'Comic Sans MS' !important
+        span,
+        p,
+        div,
+        h1,
+        h2,
+        h3 input,
+        select,
+        button {
+            font-family: 'Comic Sans MS' !important
         }
-        
     </style>
     <link rel="preconnect" href="//cdn.dynamicyield.com">
     <link rel="preconnect" href="//st.dynamicyield.com">
@@ -20,41 +26,88 @@
     <link rel="dns-prefetch" href="//st.dynamicyield.com">
     <link rel="dns-prefetch" href="//rcom.dynamicyield.com">
     <script type="text/javascript">
-    
-    // DY1
-    
-    window.DY = window.DY || {};
 
-    DY.recommendationContext = 
-    {
-        type: "HOMEPAGE", data:[]
-    };
-    //     //type: "PRODUCT", data:["1217241-100"]
-    // };
-    
-    if(document.location.href.indexOf('cookieFalse') > -1) {
-        DY.userActiveConsent = { accepted: false }
-    } else {
-        DY.userActiveConsent = { accepted: true }
-    }
-    // dataLayer = [
-    //     {cart: {
-    //         cartValue: 99.99
-    //     }}
-    // ];
-    
-    
+        (function () {
+            // ----- Helper: Read cookie -----
+            function getCookie(name) {
+                const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+                return match ? decodeURIComponent(match[2]) : null;
+            }
+
+            // ----- Helper: Set cookie -----
+            function setCookie(name, value, minutes) {
+                const expires = new Date(Date.now() + minutes * 60 * 1000).toUTCString();
+                document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+            }
+
+            // ----- Wait for DY values to exist -----
+            function waitForDY(callback) {
+                if (window.DY && DY.session && DY.jsession) {
+                    callback();
+                } else {
+                    setTimeout(() => waitForDY(callback), 50);
+                }
+            }
+
+            waitForDY(() => {
+                const dySession = DY.session;
+                const dyJSession = DY.jsession;
+
+                const cookieSession = getCookie("_dysession");
+                const cookieJSession = getCookie("_dyjsession");
+
+                const hasValidExistingCookies =
+                    cookieSession === dySession &&
+                    cookieJSession === dyJSession;
+
+                if (hasValidExistingCookies) {
+                    // ✅ Refresh expiration by 30 minutes
+                    setCookie("_dysession", dySession, 30);
+                    setCookie("_dyjsession", dyJSession, 30);
+                } else {
+                    // ✅ Set new values
+                    setCookie("_dysession", dySession, 30);
+                    setCookie("_dyjsession", dyJSession, 30);
+                }
+            });
+        })();
+
+        // DY1
+
+        window.DY = window.DY || {};
+
+        DY.recommendationContext =
+        {
+            type: "HOMEPAGE", data: []
+        };
+        //     //type: "PRODUCT", data:["1217241-100"]
+        // };
+
+        if (document.location.href.indexOf('cookieFalse') > -1) {
+            DY.userActiveConsent = { accepted: false }
+        } else {
+            DY.userActiveConsent = { accepted: true }
+        }
+        // dataLayer = [
+        //     {cart: {
+        //         cartValue: 99.99
+        //     }}
+        // ];
+
+
     </script>
-    
+
     <!-- EU 9880427 -->
     <script type="text/javascript" src="//cdn-eu.dynamicyield.com/api/9880427/api_dynamic.js"></script>
     <script type="text/javascript" src="//cdn-eu.dynamicyield.com/api/9880427/api_static.js"></script>
-    
+
     <!-- 8776574 // 8778600 -->
     <!--<script type="text/javascript" src="//cdn.dynamicyield.com/api/8776574/api_static.js"></script>-->
     <!--<script type="text/javascript" src="//cdn.dynamicyield.com/api/8776574/api_dynamic.js"></script>-->
 </head>
+
 <body>
     <h1>Test</h1>
 </body>
+
 </html>
